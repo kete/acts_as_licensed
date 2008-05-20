@@ -23,9 +23,10 @@ module Katipo
           belongs_to :license
           
           # Add association to License class
-          License.has_many self.table_name.to_sym, :dependent => :destroy
+          License.has_many self.table_name.to_sym, :dependent => :nullify
           
           # Tell ActsAsVersioned to ignore the license_id column (not versioned)
+          # TODO: Check for ActsAsVersioned inclusion.
           non_versioned_fields << "license_id" if respond_to?(:non_versioned_fields)
         end
       end
@@ -74,26 +75,6 @@ module Katipo
             logger.info "Error: license_id was attempted to be set when already set."
           end
         end
-        
-        # Stubs for possibly methods that licenseable objects need to implement to work with acts_as_licensed,
-        # depending on license metadata choosen by administrators.
-        # if !klass.instance_methods.member?("author_for_license")
-        #   def author_for_license
-        #     raise "If using $$attribute_work_to_name$$ in license metadata, author_for_license must be implemented by the licenseable object."
-        #   end
-        # end
-        # 
-        # if !instance_methods.member?("author_url_for_license")
-        #   def author_url_for_license
-        #     raise "If using $$attribute_work_to_url$$ in license metadata, author_url_for_license must be implemented by the licenseable object."
-        #   end
-        # end
-        # 
-        # if !instance_methods.member?("title_for_license")
-        #   def title_for_license
-        #     raise "If using $$license_title$$ in license metadata, title_for_license must be implemented by the licenseable object."
-        #   end
-        # end
         
       end
 
