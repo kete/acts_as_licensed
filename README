@@ -3,4 +3,18 @@ ActsAsLicenced
 
 Some portions (rails generator) based on work by Rob Sanheim in the BrainBuster rails plugin.
 
+ActsAsLicensed relies on three methods within the class you add acts_as_licensed to. They are title_for_license, author_for_license, and author_url_for_license
+
+The defaults are usually similar to the following (adjust to suit your application):
+
+def title_for_license
+  title
+end
+def author_for_license
+  Author.find(author_id)
+end
+def author_url_for_license
+  "/site/account/show/#{author_id}"
+end
+
 Copyright (c) 2008 Katipo Communications LTD, released under the MIT license.
