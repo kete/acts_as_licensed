@@ -40,7 +40,7 @@ module ActsAsLicensedHelper
   
   # Returns the license id of the default content license or nil
   def configured_default_license
-    DEFAULT_CONTENT_LICENSE.to_i
+    defined?(DEFAULT_CONTENT_LICENSE) ? DEFAULT_CONTENT_LICENSE.to_i : nil
   end
   
 end 

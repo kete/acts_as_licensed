@@ -7,6 +7,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../../../../config/environme
 require 'test/unit'
 require 'active_record/fixtures'
 require 'action_controller/test_process'
+require 'action_view/test_case'
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/debug.log")
 #config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
