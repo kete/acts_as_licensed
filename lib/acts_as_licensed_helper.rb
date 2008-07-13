@@ -24,7 +24,7 @@ module ActsAsLicensedHelper
   end
   
   # Iterate over license, i.e.:
-  # available_licences do |license|
+  # available_licenses do |license|
   #   puts license.name
   # end
   def available_licenses(&block)
