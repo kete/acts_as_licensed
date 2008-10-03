@@ -1,8 +1,8 @@
 
 module ActsAsLicensedHelper
 
-  def radio_button_for_license_selection(object_name, license)
-    radio_button_with_label_and_image(object_name, 'license_id', license.id, license.name, license.image_url) +
+  def radio_button_for_license_selection(object_name, license, options = {}, options_for_label = {})
+    radio_button_with_label_and_image(object_name, 'license_id', license.id, license.name, license.image_url, options, options_for_label) +
     link_to("View license", url_for(license.url), "target" => "_new")
   end
   
