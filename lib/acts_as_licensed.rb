@@ -50,9 +50,12 @@ module Katipo
             :attribute_work_to_name => :author_for_license
           }
           
+          # Use provided meta-data or a template to generate output
+          metadata_stub = license.metadata || "<a rel=\"license\" href=\"$$license_url$$\"><img alt=\"$$license_title$$\" style=\"border-width:0\" src=\"$$license_image_url$$\"/></a><br/>$$title$$ by <a href=\"$$attribute_work_to_url$$\">$$attribute_work_to_name$$</a> is <a rel=\"license\" href=\"$$license_url$$\">$$license_title$$</a>"
+          
           # Replace keys with actual values as appropriate.
           signature = /(\${2}[a-zA-Z0-9\-\_]+\${2})/
-          license.metadata.gsub(signature) do |match|
+          metadata_stub.gsub(signature) do |match|
             value = replacements[match.gsub(/\$/, '').to_sym]
             
             # If replacement value is a symbol, send the symbol to self

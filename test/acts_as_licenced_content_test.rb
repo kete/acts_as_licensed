@@ -117,6 +117,25 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
     license = License.first
     assert_kind_of Document, license.documents.first
   end
+  
+  def test_license_should_generate_stub_output_when_no_metadata_is_present
+    license = License.create(
+      :name => "All rights reserved",
+      :description => "Standard copyright",
+      :url => "http://en.wikipedia.org/wiki/Copyright",
+      :is_available => true,
+      :image_url => "http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg",
+      :is_creative_commons => false,
+      :metadata => nil
+    )
+    assert_valid license
+    
+    doc = new_document
+    doc.license = license
+    doc.save
+    
+    assert_equal "<a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\"><img alt=\"All rights reserved\" style=\"border-width:0\" src=\"http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg\"/></a><br/>Document by <a href=\"/site/account/show/1\">I. M. Contributor</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
+  end
 
   private
 
