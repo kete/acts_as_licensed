@@ -134,7 +134,7 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
     doc.license = license
     doc.save
     
-    assert_equal "<a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\"><img alt=\"All rights reserved\" style=\"border-width:0\" src=\"http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg\"/></a><br/>Document by <a href=\"/site/account/show/1\">I. M. Contributor</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
+    assert_equal "<a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\"><img alt=\"All rights reserved\" style=\"border-width:0\" src=\"http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg\"/></a><br/>Document by <a href=\"/site/account/show/#{Author.last.id.to_s}\">#{Author.last.name}</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
   end
 
   private
