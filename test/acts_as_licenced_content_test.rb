@@ -54,10 +54,29 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
     license = License.first
     assert_equal license.name, license.title
   end
+  
+  def test_validations_work
+    stub_data = {
+      :name => "All rights reserved",
+      :description => "Standard copyright",
+      :url => "http://en.wikipedia.org/wiki/Copyright",
+      :is_available => true,
+      :image_url => "http://nothere.com/image.png",
+      :is_creative_commons => false,
+      :metadata => '<a rel="license" href="$$license_url$$"><img alt="$$license_title$$" style="border-width:0" src="$$license_image_url$$" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">$$title$$</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="$$attribute_work_to_url$$" property="cc:attributionName" rel="cc:attributionURL">$$attribute_work_to_name$$</a> is licensed under a <a rel="license" href="$$license_url$$">$$license_title$$</a>'
+    }
+    
+    assert License.new(stub_data).valid?
+    assert !License.new(stub_data.merge(:name => nil)).valid?
+    assert !License.new(stub_data.merge(:url => nil)).valid?
+    assert !License.new(stub_data.merge(:is_available => nil)).valid?
+    assert !License.new(stub_data.merge(:is_creative_commons => nil)).valid?
+  end
 
   #
   # INSTANCE METHODS
   #
+  
   def test_document_shouldnt_be_given_license
     assert_equal false, new_document.has_license?
   end
@@ -135,6 +154,25 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
     doc.save
     
     assert_equal "<a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\"><img alt=\"All rights reserved\" style=\"border-width:0\" src=\"http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg\" /></a><br />Document by <a href=\"/site/account/show/#{Author.last.id.to_s}\">#{Author.last.name}</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
+  end
+
+  def test_license_should_generate_stub_output_when_no_metadata_is_present_and_there_is_no_image
+    license = License.create(
+      :name => "All rights reserved",
+      :description => "Standard copyright",
+      :url => "http://en.wikipedia.org/wiki/Copyright",
+      :is_available => true,
+      :image_url => "",
+      :is_creative_commons => false,
+      :metadata => ""
+    )
+    assert_valid license
+    
+    doc = new_document
+    doc.license = license
+    doc.save
+    
+    assert_equal "Document by <a href=\"/site/account/show/#{Author.last.id.to_s}\">#{Author.last.name}</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
   end
 
   private
