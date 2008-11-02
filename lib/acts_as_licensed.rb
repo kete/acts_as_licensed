@@ -51,7 +51,7 @@ module Katipo
           }
           
           # Use provided meta-data or a template to generate output
-          metadata_stub = license.metadata.blank? ? "<a rel=\"license\" href=\"$$license_url$$\"><img alt=\"$$license_title$$\" style=\"border-width:0\" src=\"$$license_image_url$$\"/></a><br/>$$title$$ by <a href=\"$$attribute_work_to_url$$\">$$attribute_work_to_name$$</a> is <a rel=\"license\" href=\"$$license_url$$\">$$license_title$$</a>" : license.metadata
+          metadata_stub = license.metadata.blank? ? "<a rel=\"license\" href=\"$$license_url$$\"><img alt=\"$$license_title$$\" style=\"border-width:0\" src=\"$$license_image_url$$\" /></a><br />$$title$$ by <a href=\"$$attribute_work_to_url$$\">$$attribute_work_to_name$$</a> is <a rel=\"license\" href=\"$$license_url$$\">$$license_title$$</a>" : license.metadata
           
           # Replace keys with actual values as appropriate.
           signature = /(\${2}[a-zA-Z0-9\-\_]+\${2})/

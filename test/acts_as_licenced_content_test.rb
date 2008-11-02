@@ -46,7 +46,7 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
                       :is_available => false,
                       :image_url => 'http://nothere.com/image.png',
                       :is_creative_commons => false,
-                      :metadata => '<a rel="license" href="$$license_url$$"><img alt="$$license_title$$" style="border-width:0" src="$$license_image_url$$"/></a><br/><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">$$title$$</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="$$attribute_work_to_url$$" property="cc:attributionName" rel="cc:attributionURL">$$attribute_work_to_name$$</a> is licensed under a <a rel="license" href="$$license_url$$">$$license_title$$</a>' } )
+                      :metadata => '<a rel="license" href="$$license_url$$"><img alt="$$license_title$$" style="border-width:0" src="$$license_image_url$$" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">$$title$$</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="$$attribute_work_to_url$$" property="cc:attributionName" rel="cc:attributionURL">$$attribute_work_to_name$$</a> is licensed under a <a rel="license" href="$$license_url$$">$$license_title$$</a>' } )
     assert_equal (License.count - 1), License.find_available.size
   end
 
@@ -90,12 +90,12 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
                                 :is_available => true,
                                 :image_url => 'http://www.example.com/image.png',
                                 :is_creative_commons => true,
-                                :metadata => '<a rel="license" href="$$license_url$$"><img alt="$$license_title$$" style="border-width:0" src="$$license_image_url$$"/></a><br/><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">$$title$$</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="$$attribute_work_to_url$$" property="cc:attributionName" rel="cc:attributionURL">$$attribute_work_to_name$$</a> is licensed under a <a rel="license" href="$$license_url$$">$$license_title$$</a>' } )
+                                :metadata => '<a rel="license" href="$$license_url$$"><img alt="$$license_title$$" style="border-width:0" src="$$license_image_url$$" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">$$title$$</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="$$attribute_work_to_url$$" property="cc:attributionName" rel="cc:attributionURL">$$attribute_work_to_name$$</a> is licensed under a <a rel="license" href="$$license_url$$">$$license_title$$</a>' } )
     doc = new_document
     doc.license_id = license.id
     doc.save
     metadata = doc.license_metadata
-    shouldbe_metadata = '<a rel="license" href="http://www.example.com/"><img alt="Test" style="border-width:0" src="http://www.example.com/image.png"/></a><br/><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">Document</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="/site/account/show/4" property="cc:attributionName" rel="cc:attributionURL">I. M. Contributor</a> is licensed under a <a rel="license" href="http://www.example.com/">Test</a>'
+    shouldbe_metadata = '<a rel="license" href="http://www.example.com/"><img alt="Test" style="border-width:0" src="http://www.example.com/image.png" /></a><br /><span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" property="dc:title" rel="dc:type">Document</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="/site/account/show/4" property="cc:attributionName" rel="cc:attributionURL">I. M. Contributor</a> is licensed under a <a rel="license" href="http://www.example.com/">Test</a>'
     assert_not_nil metadata
     assert_equal shouldbe_metadata, metadata
   end
@@ -134,7 +134,7 @@ class ActsAsLicencedContentTest < Test::Unit::TestCase
     doc.license = license
     doc.save
     
-    assert_equal "<a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\"><img alt=\"All rights reserved\" style=\"border-width:0\" src=\"http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg\"/></a><br/>Document by <a href=\"/site/account/show/#{Author.last.id.to_s}\">#{Author.last.name}</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
+    assert_equal "<a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\"><img alt=\"All rights reserved\" style=\"border-width:0\" src=\"http://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg\" /></a><br />Document by <a href=\"/site/account/show/#{Author.last.id.to_s}\">#{Author.last.name}</a> is <a rel=\"license\" href=\"http://en.wikipedia.org/wiki/Copyright\">All rights reserved</a>", doc.license_metadata
   end
 
   private
