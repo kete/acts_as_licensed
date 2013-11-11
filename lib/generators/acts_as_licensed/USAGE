@@ -1,0 +1,7 @@
+Description:
+    The ActsAsLicensed migration generator creates a migration for the License model.
+
+Example:
+	$ rails generate acts_as_licensed:create_migration
+		create  db/migrate/20131112023249_add_licenses_table.rb
+

@@ -1,4 +1,3 @@
-
 module ActsAsLicensedHelper
 
   def radio_button_for_license_selection(object_name, license, options = {}, options_for_label = {})
@@ -44,3 +43,5 @@ module ActsAsLicensedHelper
   end
   
 end 
+
+ActionView::Base.send :include, ActsAsLicensedHelper
