@@ -1,119 +1,134 @@
 # ActsAsLicenced
 
-Some portions (rails generator) based on work by Rob Sanheim in the BrainBuster rails plugin.
+Allows you to add a license to models in your Rails 3/4 apps.
 
-# INSTALL
-
-Install the plugin by running
+# Install
 
 1. Add this gem to your `Gemfile`
+    ```
+    # Gemfile
+    gem "acts-as-licenced", git: "kete/acts_as_licensed"
+    ```
+2. Use the rails generator supplied with this gem to create the migration file that will add the `licence` table to the DB.
 
-```
-# Gemfile
-gem "acts-as-licenced", git: "kete/acts_as_licensed"
-```
+    This is a separate step to allow you to customise the migration if you need to.
+    ```
+    # show all available generators
+    $ rails generate
 
-2. Create the migration that adds the `licence` table to your database.
+    # run the generator provided by this gem
+    $ rails generate acts_as_licensed:create_migration
 
-This is a separate step to allow you to customise the migration if you need to.
-```
-$ ??? ./script/generate acts_as_licensed_migration
-```
+    # after running the above command, a new migration file will be available 
+    # in `db/migrate' dir. You can edit it if you need to.
+    ```
 
 3. Migrate your database
-```
-rake db:migrate
-```
+    ```
+    $ rake db:migrate
+    ```
 
 4. Install the licenses you want to assign to content. See a list of them by running
-```
-rake -D acts_as_licensed
-```
+    ```
+    $ rake -D acts_as_licensed
 
-You can also import a set of Creative Commons New Zealand licenses (excluding No Derivate Works variants) using the following command:
-```
-rake acts_as_licensed:import_nz_cc_licenses"
-```
+    # examples
+    $ rake acts_as_licensed:import_all_cc_licenses
+    $ rake acts_as_licensed:import_nz_cc_licenses
+    $ rake acts_as_licensed:import_au_cc_licenses
+    ```
 
-5. Setup controller (???)
+5. Add `acts_as_licensed` to your model(s).
+    When an item is released under a certain license, you must specify
 
-Finally, add the following line to the controller which you want to add the licensed plugin to
-```
-  acts_as_licensed
-```
+    1. **who** is releasing it
+    2. **the name** of the thing being released as
 
-# ADDITIONAL INSTALLATION
+    Because this will be different for each object you licence, `acts_as_license` requires three methods to be implemented in any class that include it:
 
-ActsAsLicensed relies on three methods within the class you add acts_as_licensed to.
+    1. `title_for_license`
+    2. `author_for_license`
+    3. `author_url_for_license`
 
-They are title_for_license, author_for_license, and author_url_for_license
-
-The defaults are usually similar to the following (adjust to suit your application):
-
-  def title_for_license
-    title
-  end
-  def author_for_license
-    self.author.name
-  end
-  def author_url_for_license
-    "/site/account/show/#{author_id}"
-  end
-
-You can also define a default license by setting DEFAULT_CONTENT_LICENSE somewhere in your initializers (the constant contains the id of a license in the license table).
+    `acts_as_licensed` will use these methods to complete the license.
 
 
-# USAGE
+
+    For example:
+    ```ruby
+    class MyThingambob < ActiveRecord::Base
+      acts_as_licensed
+
+
+      # acts_as_licensed requires you to implement these three methods in any model
+      # that you include it in
+
+      def title_for_license
+        "Footastic Thingambob"
+      end
+
+      def author_for_license
+        "Mr. Foo"
+      end
+
+      def author_url_for_license
+        "/users/mr_foo"
+      end
+    end
+    ```
+
+# Usage
 
 ## Class Methods
 
-You can get a list of all available licenses by using
-
-```
-  License.find_available
+```ruby
+# get a list of all available licenses by using
+License.find_available
 ```
 
 ## Instance Methods
 
-Check whether the object has a license by using
+```ruby
+# Check whether the object has a license
+object.has_license?
 
-```
-  object.has_license?
-```
+# Update the license, which raises an error if the object already has a license
+object.license_id = id_of_new_license
 
-Update the license, which raises an error if the object already have a license, by using
-
-```
-  object.license_id = id_of_new_license
-```
-
-Retrieve the metadata, html indicating the license type of the object, by using
-
-```
-  object.license_metadata
+# Retrieve the metadata, html indicating the license type of the object
+object.license_metadata
 ```
 
 ## Helper Methods
 
-```
-licenses_are_available?  # Check whether licenses are available through
-configured_default_license # Get the default license if configured else nil through
-```
+```ruby
+# Check whether licenses are available
+licenses_are_available?  
 
-Iterate over each license using
-```
-  available_licenses do |license|
-    puts license.name
-  end
+# Get the default license if configured else nil
+configured_default_license 
+
+# Iterate over each license
+available_licenses do |license|
+  puts license.name
+end
 ```
 
 Helper methods for license selection in forms include:
 
 ```
-  radio_button_for_license_selection(object_name, license)
-  radio_button_with_label_and_image(object_name, method, tag_value, label, image_url = nil, options = {}, options_for_label = {})
-  radio_button_with_label(object_name, method, tag_value, label, options = {}, options_for_label = {})
+radio_button_for_license_selection(object_name, license)
+radio_button_with_label_and_image(object_name, method, tag_value, label, image_url = nil, options = {}, options_for_label = {})
+radio_button_with_label(object_name, method, tag_value, label, options = {}, options_for_label = {})
 ```
 
+# TODO
 
-Copyright (c) 2008 ActsAsLicensed Communications LTD, released under the MIT license.
+* replace the DEFAULT_CONTENT_LICENSE constant with an appropriate method
+* ar_ext.rb mentions the versioning subsystem which should not be tied to this here - fix this when versioning has been upgraded.
+
+# Credits
+
+Some portions (rails generator) based on work by Rob Sanheim in the BrainBuster rails plugin.
+
+*Copyright (c) 2008 Kapito Communications LTD, released under the MIT license.*

@@ -34,7 +34,7 @@ module ActsAsLicensedHelper
   
   # Checks whether licenses are available for selection
   def licenses_are_available?
-    !License.find_available.empty?
+    ! License.find_available.empty?
   end
   
   # Returns the license id of the default content license or nil
