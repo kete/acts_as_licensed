@@ -4,8 +4,8 @@ Allows you to add a license to models in your Rails 3/4 apps.
 
 # Install
 
-1. Add this gem to your `Gemfile`
-    ```
+1. Add this gem to your `Gemfile`:
+    ```ruby
     # Gemfile
     gem "acts-as-licenced", git: "kete/acts_as_licensed"
     ```
